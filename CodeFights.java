@@ -1236,4 +1236,28 @@ public class Solution
     }
 }
 
+////////////////////// Kth Smallest Element in a BST
+
+class Solution 
+{
+    int count = 0;
+    int result = Integer.MIN_VALUE;
+    
+    public int kthSmallest(TreeNode root, int k) 
+    {
+        kth(root, k);
+        return result;
+    }
+    
+    private void kth(TreeNode root, int k)
+    {
+        if (root == null) return;
+    
+        kth(root.left, k);
+        count++;
+        if (count == k) result = root.val;
+        kth(root.right, k);
+    }
+}
+
 //////////////////////
