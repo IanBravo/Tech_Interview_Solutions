@@ -1191,4 +1191,49 @@ private void preorderTraversal(TreeNode root, List<Integer> list)
     preorderTraversal(root.right, list);        
 }
 
-///////////////////
+/////////////////// Populating Next Right Pointers in Each Node
+
+/**
+ * Definition for binary tree with next pointer.
+ * public class TreeLinkNode {
+ *     int val;
+ *     TreeLinkNode left, right, next;
+ *     TreeLinkNode(int x) { val = x; }
+ * }
+ */
+public class Solution 
+{
+    public void connect(TreeLinkNode root) 
+    {
+        if (root == null) return;
+        
+        Queue<TreeLinkNode> queue = new ArrayDeque<TreeLinkNode>();
+        queue.add(root);
+        double nodesInLevel = 1;
+        double level = 0;
+        double count = 1;
+        
+        while(!queue.isEmpty())
+        {
+            TreeLinkNode curr = queue.poll();
+            
+            if (count < nodesInLevel)
+            {
+                TreeLinkNode temp = queue.peek();
+                curr.next = temp;
+                count++;
+            }
+            else
+            {
+                count = 1;
+                level++;
+                nodesInLevel = Math.pow(2, level);
+            }
+            
+            if (curr.left != null) queue.add(curr.left);
+            if (curr.right != null) queue.add(curr.right);
+        }
+    }
+}
+
+//////////////////////
