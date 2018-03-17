@@ -1154,4 +1154,23 @@ private void inorderTraversal(TreeNode root, List<Integer> list)
     inorderTraversal(root.right, list);
 }
 
-///////////////////
+/////////////////// Binary Tree Post Order Traversal
+
+public List<Integer> postorderTraversal(TreeNode root) 
+{
+    List<Integer> res = new ArrayList<Integer>();
+    postorderTraversal(root, res);
+    return res;
+}
+
+private void postorderTraversal(TreeNode root, List<Integer> list)
+{
+    if (root == null) return;
+
+    postorderTraversal(root.left, list);        
+    postorderTraversal(root.right, list);
+    list.add(root.val);
+}
+
+
+//////////////////
