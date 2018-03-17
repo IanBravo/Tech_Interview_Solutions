@@ -1089,4 +1089,51 @@ public TreeNode mergeTrees(TreeNode t1, TreeNode t2)
     return t1;
 }
 
+/////////////////// BST iterator
+
+public class BSTIterator 
+{
+    int index;
+    List<Integer> tree;
+    public BSTIterator(TreeNode root) 
+    {
+        this.tree = new ArrayList<Integer>();
+        inOrderArray(root, tree);
+        this.index = 0;
+    }
+
+    /** @return whether we have a next smallest number */
+    public boolean hasNext() 
+    {
+        if (this.index < this.tree.size())
+            return true;
+        else
+            return false;
+    }
+
+    /** @return the next smallest number */
+    public int next() 
+    {
+        if (this.hasNext())
+        {
+            int temp = this.tree.get(this.index);
+            this.index++;
+            return temp;
+        }
+        else
+        {
+            return this.tree.get(this.index);
+        }
+    }
+
+    private void inOrderArray(TreeNode root, List<Integer> list)
+    {
+        if (root == null) return;
+
+        inOrderArray(root.left, list);
+        list.add(root.val);
+        inOrderArray(root.right, list);
+    }
+}
+
 ///////////////////
