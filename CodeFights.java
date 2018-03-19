@@ -1280,4 +1280,31 @@ public int maxProfit(int[] prices)
     return maxProfit;
 }
 
-////////////////////
+//////////////////// Product of Array Except Self
+
+public int[] productExceptSelf(int[] intArray) 
+{
+    int[] productsOfAllIntsExceptAtIndex = new int[intArray.length];
+    if (intArray.length < 2) 
+    {
+        return productsOfAllIntsExceptAtIndex;
+    }
+
+    int productSoFar = 1;
+    for (int i = 0; i < intArray.length; i++) 
+    {
+        productsOfAllIntsExceptAtIndex[i] = productSoFar;
+        productSoFar *= intArray[i];
+    }
+
+    productSoFar = 1;
+    for (int i = intArray.length - 1; i >= 0; i--) 
+    {
+        productsOfAllIntsExceptAtIndex[i] *= productSoFar;
+        productSoFar *= intArray[i];
+    }
+
+    return productsOfAllIntsExceptAtIndex;
+}
+
+//////////////////    
