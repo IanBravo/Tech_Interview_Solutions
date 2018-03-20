@@ -1364,4 +1364,35 @@ public boolean canPermutePalindrome(String s)
 }
 
 
-////////////////
+//////////////// Longest Substring Without Repeating Characters
+
+public int lengthOfLongestSubstring(String str) 
+{
+    if (str.length() == 0)
+        return 0;
+    
+    int maxSub = 0;
+    StringBuilder sb = new StringBuilder();
+    HashSet<Character> hash = new HashSet<>();
+    
+    for (char c : str.toCharArray())
+    {
+        if (hash.contains(c))
+        {
+            maxSub = Math.max(maxSub, sb.length());
+            hash.clear();
+            sb.delete(0, sb.length());
+            hash.add(c);
+            sb.append(c);
+        }
+        else
+        {
+            hash.add(c);
+            sb.append(c);
+        }
+    }
+    
+    return Math.max(maxSub, sb.length());
+}
+
+////////////////////
