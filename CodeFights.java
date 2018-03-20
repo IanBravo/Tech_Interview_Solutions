@@ -1345,3 +1345,23 @@ public int maximumProduct(int[] arrayOfInts)
 
     return highestProductOf3;
 }
+
+/////////////// Palindrome Permutation
+
+public boolean canPermutePalindrome(String s) 
+{
+    HashSet<Character> unpairedChars = new HashSet<>();
+    
+    for (char c : s.toCharArray())
+    {
+        if (unpairedChars.contains(c))
+            unpairedChars.remove(c);
+        else
+            unpairedChars.add(c);
+    }
+    
+    return unpairedChars.size() <= 1;
+}
+
+
+////////////////
