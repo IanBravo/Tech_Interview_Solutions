@@ -1395,4 +1395,45 @@ public int lengthOfLongestSubstring(String str)
     return Math.max(maxSub, sb.length());
 }
 
-////////////////////
+//////////////////// Reverse Words in a String
+
+public String reverseWords(String s) 
+{
+    if (s.length() == 0) return s;
+    
+    Stack<String> words = new Stack<>();
+    StringBuilder word = new StringBuilder();
+    
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (s.charAt(i) == ' ')
+        {
+            if (word.length() > 0)
+            {
+                words.push(word.toString());
+                word.delete(0, word.length());
+            }
+        }
+        else
+        {
+            word.append(s.charAt(i));
+        }
+    }
+    
+    if (word.length() > 0)
+    {
+        words.push(word.toString());
+        word.delete(0, word.length());
+    }
+    
+    while(!words.isEmpty())
+    {
+        word.append(words.pop());
+        word.append(" ");
+    }
+    
+    if (word.length() > 0)
+        word.delete(word.length() - 1, word.length());
+    
+    return word.toString();
+}
