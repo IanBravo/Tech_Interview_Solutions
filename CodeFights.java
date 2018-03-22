@@ -1511,3 +1511,53 @@ public int firstUniqChar(String s)
     
     return -1;
 }
+
+/////////////////// Group Anagrams
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) 
+    {
+        List<List<String>> groups = new ArrayList<List<String>>();
+        
+        if (strs.length == 0) return groups;
+        
+        HashSet<String> groupedWords = new HashSet<>();
+        List<String> anagrams = new ArrayList<>();
+        
+        for (int i = 0; i < strs.length; i++)
+        {
+            if (!groupedWords.contains(strs[i]))
+            {
+                anagrams.add(strs[i]);
+                for (int j = i + 1; j < strs.length; j++)
+                {
+                    if (isAnagram(strs[i], strs[j])) 
+                    {
+                        anagrams.add(strs[j]);
+                        groupedWords.add(strs[j]);
+                    }
+                }
+                groups.add(new ArrayList<String>(anagrams));
+                anagrams.clear();
+            }            
+        }
+        
+        return groups;
+    }
+    
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) return false;
+        
+        int[] table = new int[26];
+        
+        for (int i = 0; i < s.length(); i++)
+            table[s.charAt(i) - 'a']++;
+        
+        for (int i = 0; i < t.length(); i++) 
+        {
+            table[t.charAt(i) - 'a']--;
+            if (table[t.charAt(i) - 'a'] < 0) return false;
+        }
+        return true;
+    }
+}
