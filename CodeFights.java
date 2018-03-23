@@ -1586,4 +1586,35 @@ public int findMin(int[] nums)
     return nums[L];
 }
 
-///////////////////
+/////////////////// Search in Rotated Sorted Array
+
+public int search(int[] nums, int target) 
+    {
+        if (nums.length == 0) return -1;
+        
+        int L = 0, R = nums.length - 1;
+        if (target < nums[L] && target > nums[R]) return -1;
+        
+        while (L < R) 
+        {
+            int middle = (L + R) / 2;
+            if (nums[middle] <= nums[R])
+            {
+                if (target > nums[middle] && target <= nums[R]) 
+                    L = middle + 1;
+                else 
+                    R = middle;          
+            }
+            else
+            {
+                if (target <= nums[middle] && target >= nums[L])
+                    R = middle;
+                else
+                    L = middle + 1;            
+            }
+        }
+        if (nums[L] == target) 
+            return L;
+        else 
+            return -1;
+    }
