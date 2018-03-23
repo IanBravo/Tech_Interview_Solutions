@@ -1570,4 +1570,20 @@ public List<List<String>> groupAnagrams(String[] strs)
     return new ArrayList(ans.values());
 }
 
-/////////////////////
+///////////////////// Find Minimum in Rotated Sorted Array
+
+public int findMin(int[] nums) 
+{
+    int L = 0, R = nums.length - 1;
+    while (L < R && nums[L] >= nums[R])
+    {
+        int middle = (R + L) / 2;
+        if (nums[middle] > nums[R])
+            L = middle + 1;
+        else
+            R = middle;
+    }
+    return nums[L];
+}
+
+///////////////////
