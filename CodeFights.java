@@ -1589,32 +1589,67 @@ public int findMin(int[] nums)
 /////////////////// Search in Rotated Sorted Array
 
 public int search(int[] nums, int target) 
+{
+    if (nums.length == 0) return -1;
+    
+    int L = 0, R = nums.length - 1;
+    if (target < nums[L] && target > nums[R]) return -1;
+    
+    while (L < R) 
     {
-        if (nums.length == 0) return -1;
-        
-        int L = 0, R = nums.length - 1;
-        if (target < nums[L] && target > nums[R]) return -1;
-        
-        while (L < R) 
+        int middle = (L + R) / 2;
+        if (nums[middle] <= nums[R])
         {
-            int middle = (L + R) / 2;
-            if (nums[middle] <= nums[R])
-            {
-                if (target > nums[middle] && target <= nums[R]) 
-                    L = middle + 1;
-                else 
-                    R = middle;          
-            }
+            if (target > nums[middle] && target <= nums[R]) 
+                L = middle + 1;
+            else 
+                R = middle;          
+        }
+        else
+        {
+            if (target <= nums[middle] && target >= nums[L])
+                R = middle;
             else
+                L = middle + 1;            
+        }
+    }
+    if (nums[L] == target) 
+        return L;
+    else 
+        return -1;
+}
+
+//////////////////// Longest Palindromic Substring
+
+class Solution 
+{
+    public String longestPalindrome(String s) 
+    {
+        int start = 0, end = 0;
+        
+        for (int i = 0; i < s.length(); i++)
+        {
+            int len1 = palindromeCenter(s, i, i);
+            int len2 = palindromeCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start)
             {
-                if (target <= nums[middle] && target >= nums[L])
-                    R = middle;
-                else
-                    L = middle + 1;            
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
             }
         }
-        if (nums[L] == target) 
-            return L;
-        else 
-            return -1;
+        return s.substring(start, end + 1);
     }
+    
+    public int palindromeCenter(String s, int left, int right)
+    {
+        int L = left, R = right;
+        
+        while (L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R))
+        {
+            L--;
+            R++;
+        }
+        return R - L - 1;
+    }
+}
