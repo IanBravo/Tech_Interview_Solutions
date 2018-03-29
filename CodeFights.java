@@ -1691,4 +1691,34 @@ public List<List<Integer>> threeSum(int[] nums)
     return sums;
 }
 
-//////////////////////
+////////////////////// DP: Decode Ways
+
+public int numDecodings(String s)
+{
+    if (s.length() == 0 || s.charAt(0) == '0') return 0;        
+    
+    int prev = 1, curr = 1;
+    
+    for (int i = 1; i < s.length(); i++)
+    {
+        if (s.charAt(i) == '0')
+        {
+            if (s.charAt(i - 1) == '0' || s.charAt(i - 1) > '2') return 0;
+            curr = prev;
+        }
+        else
+        {
+            if (s.charAt(i - 1) == '1' || (s.charAt(i - 1) == '2' && s.charAt(i) <= '6'))
+            {
+                int next = prev + curr;
+                prev = curr;
+                curr = next;
+            }
+            else
+            {
+                prev = curr;
+            }
+        }
+    }
+    return curr;
+}
