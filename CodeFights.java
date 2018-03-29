@@ -1743,3 +1743,33 @@ public boolean wordBreak(String s, List<String> wordDict)
     }
     return f[s.length()];
 }
+
+
+/////////////////////// DP: Palindromic Substrings
+
+class Solution 
+{
+    public int countSubstrings(String s) 
+    {
+        int palindromeCount = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            palindromeCount += palindromeCenter(s, i, i);
+            palindromeCount += palindromeCenter(s, i, i + 1);
+        }
+        return palindromeCount;
+    }
+    
+    public int palindromeCenter(String s, int left, int right)
+    {
+        int L = left, R = right;
+        int count = 0;
+        while (L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R))
+        {
+            count ++;
+            L--;
+            R++;
+        }
+        return count;
+    }
+}
