@@ -1826,3 +1826,30 @@ class Solution {
         return false;
     }
 }
+
+////////////////////////// Multiply Strings
+
+public String multiply(String num1, String num2) 
+{
+    StringBuilder res = new StringBuilder();
+    int[] mult = new int[num1.length() + num2.length()];
+    
+    num1 = new StringBuilder(num1).reverse().toString();
+    num2 = new StringBuilder(num2).reverse().toString();               
+    
+    for (int i = 0; i < num1.length(); i++)
+    {
+        for (int j = 0; j < num2.length(); j++)
+        {
+            mult[i + j] += (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+            mult[i + j + 1] += mult[i + j] / 10;
+            mult[i + j] %= 10;
+        }
+    }
+    
+    int i = num1.length() + num2.length() - 1;
+    while (mult[i] == 0 && i != 0) --i;
+    while (i >= 0) res.append(mult[i--]);
+    
+    return res.toString();
+}
