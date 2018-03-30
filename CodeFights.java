@@ -1773,3 +1773,56 @@ class Solution
         return count;
     }
 }
+
+//////////////////////// DP: Word Search
+
+class Solution {
+    public boolean exist(char[][] board, String word) 
+    {
+        for (int rows = 0; rows < board.length; rows++)
+        {
+            for (int columns = 0; columns < board[rows].length; columns++)
+            {
+                if (board[rows][columns] == word.charAt(0))
+                {                   
+                    if (hasPath(board, new boolean[board.length][board[0].length], word, rows, columns, 0)) return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean hasPath(char[][] board, boolean[][] visited, String word, int rows, int columns, int index)
+    {
+        if (index == word.length() - 1) return true;
+        visited[rows][columns] = true;
+        
+        
+        if (columns + 1 < board[rows].length)
+        {
+            if (board[rows][columns + 1] == word.charAt(index + 1) && !visited[rows][columns + 1])
+                 if (hasPath(board, visited, word, rows, columns + 1, index + 1)) return true;
+        }
+        
+        if (rows + 1 < board.length)
+        {
+            if (board[rows + 1][columns] == word.charAt(index + 1) && !visited[rows + 1][columns])
+                if (hasPath(board, visited, word, rows + 1, columns, index + 1)) return true;
+        }
+        
+        if (rows - 1 >= 0)
+        {
+            if (board[rows - 1][columns] == word.charAt(index + 1) && !visited[rows - 1][columns])
+                 if (hasPath(board, visited, word, rows - 1, columns, index + 1)) return true;
+        }
+        
+        if (columns - 1 >= 0)
+        {
+            if (board[rows][columns - 1] == word.charAt(index + 1) && !visited[rows][columns - 1])          
+                if (hasPath(board, visited, word, rows, columns - 1, index + 1)) return true;                       
+        }
+        
+        visited[rows][columns] = false;
+        return false;
+    }
+}
