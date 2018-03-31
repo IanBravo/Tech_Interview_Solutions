@@ -1853,3 +1853,56 @@ public String multiply(String num1, String num2)
     
     return res.toString();
 }
+
+
+/////////////////////////////// Number of Islands
+
+class Solution {
+    public int numIslands(char[][] grid) 
+    {
+        if (grid.length == 0) return 0;
+        int islands = 0;
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        for (int rows = 0; rows < grid.length; rows++)
+        {
+            for (int columns = 0; columns < grid[rows].length; columns++)
+            {
+                if (grid[rows][columns] == '1' && !visited[rows][columns])
+                {
+                    islands++;
+                    populateMap(grid, visited, rows, columns);
+                }
+            }
+        }
+        return islands;
+    }
+    
+    public void populateMap(char[][] board, boolean[][] visited, int rows, int columns)
+    {
+        visited[rows][columns] = true;
+        
+        if (columns + 1 < board[rows].length)
+        {
+            if (board[rows][columns + 1] == '1' && !visited[rows][columns + 1])
+                populateMap(board, visited, rows, columns + 1);
+        }
+        
+        if (rows + 1 < board.length)
+        {
+            if (board[rows + 1][columns] == '1' && !visited[rows + 1][columns])
+                populateMap(board, visited, rows + 1, columns);
+        }
+        
+        if (rows - 1 >= 0)
+        {
+            if (board[rows - 1][columns] == '1' && !visited[rows - 1][columns])
+                populateMap(board, visited, rows - 1, columns);
+        }
+        
+        if (columns - 1 >= 0)
+        {
+            if (board[rows][columns - 1] == '1' && !visited[rows][columns - 1])         
+                populateMap(board, visited, rows, columns - 1);                     
+        }
+    }
+}
