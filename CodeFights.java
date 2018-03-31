@@ -1914,3 +1914,45 @@ public int findKthLargest(int[] nums, int k)
     Arrays.sort(nums);
     return nums[nums.length - k];
 }
+
+//////////////////// Minimum Path Sum
+// iterative
+public int minPathSum(int[][] grid) 
+{
+    for(int row = 0; row < grid.length; row++)
+    {
+        for(int column = 0; column < grid[0].length; column++)
+        {
+            if (row == 0 && column != 0)
+                grid[row][column] += grid[row][column - 1];
+            
+            if (row != 0 && column == 0)
+                grid[row][column] += grid[row - 1][column];
+            
+            if (row != 0 && column != 0)
+                grid[row][column] += Math.min(grid[row - 1][column], grid[row][column - 1]);
+        }
+    }
+    return grid[grid.length - 1][grid[0].length - 1];
+}
+
+//recursive
+
+static int pathSum(int[][] grid, int row, int column, int sum)
+{       
+    if (row == grid.length - 1 && column == grid[0].length - 1)
+        return sum;         
+    
+    if (row == grid.length - 1 && column < grid[0].length)          
+        return pathSum(grid, row, column + 1, sum + grid[row][column + 1]);     
+    
+    if (row < grid.length && column == grid[0].length - 1)
+        return pathSum(grid, row + 1, column, sum + grid[row + 1][column]);
+    
+    if (row < grid.length - 1 && column < grid[0].length - 1)
+        sum = Math.min(pathSum(grid, row, column + 1, sum + grid[row][column + 1]), pathSum(grid, row + 1, column, sum + grid[row + 1][column]));
+    
+    return sum;
+}
+
+//////////////////////////////
