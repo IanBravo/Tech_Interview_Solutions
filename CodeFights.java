@@ -2003,3 +2003,69 @@ public int longestConsecutive(int[] nums)
     
     return Math.max(current, longest);
 }
+
+///////////////////////////// Implement Trie (Prefix Tree)
+
+class Trie 
+{
+    TrieNode root;
+    /** Initialize your data structure here. */
+    public Trie() 
+    {
+        root = new TrieNode('#');
+    }
+    
+    /** Inserts a word into the trie. */
+    public void insert(String word) 
+    {
+        TrieNode node = root;
+        for (int i = 0; i < word.length(); i++)
+        {
+            if (node.children[word.charAt(i) - 'a'] == null)
+                node.children[word.charAt(i) - 'a'] = new TrieNode(word.charAt(i));
+            node = node.children[word.charAt(i) - 'a'];
+        }
+        node.endOfWord = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    public boolean search(String word) 
+    {
+        TrieNode node = root;
+        for (int i = 0; i < word.length(); i++)
+        {
+            if (node.children[word.charAt(i) - 'a'] == null) return false;                  
+            node = node.children[word.charAt(i) - 'a'];
+        }
+
+        if (node.endOfWord) return true;
+        return false;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    public boolean startsWith(String prefix) 
+    {
+        TrieNode node = root;
+        for (int i = 0; i < prefix.length(); i++)
+        {
+            if (node.children[prefix.charAt(i) - 'a'] == null) return false;                    
+            node = node.children[prefix.charAt(i) - 'a'];
+        }
+        return true;
+    }
+}
+
+class TrieNode 
+{
+    public char letter;
+    public boolean endOfWord;
+    public TrieNode[] children;
+
+    TrieNode(char c) {
+        letter = c;
+        endOfWord = false;
+        children = new TrieNode[26];
+    }
+}
+
+//////////////////////////////////
