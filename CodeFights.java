@@ -2120,4 +2120,23 @@ class Solution {
     }
 }
 
-///////////////////////
+/////////////////////// Unique Paths II
+
+public int uniquePathsWithObstacles(int[][] obstacleGrid) 
+{
+    int m = obstacleGrid.length;
+    if (m == 0) return 0;
+    
+    int n = obstacleGrid[0].length;        
+    int[][] matrix = new int [m + 1][n + 1];
+    matrix[m - 1][n] = 1;
+    
+    for (int row = m - 1; row >= 0; row--)
+    {
+        for (int column = n - 1; column >= 0; column--)
+        {
+            matrix[row][column] = (obstacleGrid[row][column] == 1) ? 0 : matrix[row + 1][column] + matrix[row][column + 1];
+        }
+    }
+    return matrix[0][0];
+}
