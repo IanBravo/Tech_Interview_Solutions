@@ -2053,3 +2053,71 @@ class Solution
         return chars;
     }
 }
+
+////////////////////////// Unique Paths
+// Recursion
+
+class Solution {
+    public int uniquePaths(int m, int n) 
+    {
+        return backtrack(m, n, 0, 0);
+    }
+    
+    private int backtrack(int m, int n, int row, int column)
+    {
+        if (row == m - 1 && column == n - 1) return 1;
+        if (row >= m || column >= n) return 0;
+        
+        return backtrack(m, n, row + 1, column) + backtrack(m, n, row, column + 1);
+    }
+}
+
+// Memoization
+class Solution {
+    public int uniquePaths(int m, int n) 
+    {
+        int[][] matrix = new int [m + 1][n + 1];
+        for (int i = 0; i < m + 1; i++)
+        {
+            for (int j = 0; j < n + 1; j++)
+            {
+                matrix[i][j] = -1;
+            }
+        }
+        return backtrack(m, n, 0, 0, matrix);
+    }
+    
+    private int backtrack(int m, int n, int row, int column, int[][] matrix)
+    {
+        if (row == m - 1 && column == n - 1) return 1;
+        if (row >= m || column >= n) return 0;
+        
+        if (matrix[row + 1][column] == -1)
+            matrix[row + 1][column] = backtrack(m, n, row + 1, column, matrix);
+        
+        if (matrix[row][column + 1] == -1)
+            matrix[row][column + 1] = backtrack(m, n, row, column + 1, matrix);
+        
+        return matrix[row + 1][column] + matrix[row][column + 1];
+    }
+}
+
+// Bottom up
+class Solution {
+    public int uniquePaths(int m, int n) 
+    {
+        int[][] matrix = new int [m + 1][n + 1];
+        matrix[m - 1][n] = 1;
+        
+        for (int row = m - 1; row >= 0; row--)
+        {
+            for (int column = n - 1; column >= 0; column--)
+            {
+                matrix[row][column] = matrix[row + 1][column] + matrix[row][column + 1];
+            }
+        }
+        return matrix[0][0];
+    }
+}
+
+///////////////////////
