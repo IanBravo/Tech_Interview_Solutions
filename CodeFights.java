@@ -2003,3 +2003,53 @@ public int longestConsecutive(int[] nums)
     
     return Math.max(current, longest);
 }
+
+///////////////////////// Letter Combinations of a Phone Number
+
+class Solution 
+{
+    public List<String> letterCombinations(String digits) 
+    {
+        if (digits.length() == 0) return new ArrayList<>();
+        
+        List<String> combinations = new ArrayList<>();
+        HashMap<Character, char[]> letters = digits();
+        char[] combination = new char[digits.length()];
+        combinationHelper(digits, letters, combination, 0, combinations);
+        return combinations;
+    }
+    
+    public void combinationHelper(String digits, HashMap<Character, char[]> letters, char[] combination, int digit, List<String> combinations)
+    {
+        if (digit == digits.length())
+        {
+            combinations.add(new String(combination));
+        }
+        else
+        {
+            for (char letter : letters.get(digits.charAt(digit)))
+            {
+                combination[digit] = letter;
+                combinationHelper(digits, letters, combination, digit + 1, combinations);
+            }
+        }
+    }
+    
+    private HashMap<Character, char[]> digits()
+    {
+        HashMap<Character, char[]> chars = new HashMap<>();
+        
+        chars.put('0', new char[] {'0'});
+        chars.put('1', new char[] {'1'});
+        chars.put('2', new char[] {'a','b','c'});
+        chars.put('3', new char[] {'d','e','f'});
+        chars.put('4', new char[] {'g','h','i'});
+        chars.put('5', new char[] {'j','k','l'});
+        chars.put('6', new char[] {'m','n','o'});
+        chars.put('7', new char[] {'p','q','r', 's'});
+        chars.put('8', new char[] {'t','u','v'});
+        chars.put('9', new char[] {'w','x','y','z'});
+        
+        return chars;
+    }
+}
