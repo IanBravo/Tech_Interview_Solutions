@@ -2068,4 +2068,139 @@ class TrieNode
     }
 }
 
-//////////////////////////////////
+///////////////////////// Letter Combinations of a Phone Number
+
+class Solution 
+{
+    public List<String> letterCombinations(String digits) 
+    {
+        if (digits.length() == 0) return new ArrayList<>();
+        
+        List<String> combinations = new ArrayList<>();
+        HashMap<Character, char[]> letters = digits();
+        char[] combination = new char[digits.length()];
+        combinationHelper(digits, letters, combination, 0, combinations);
+        return combinations;
+    }
+    
+    public void combinationHelper(String digits, HashMap<Character, char[]> letters, char[] combination, int digit, List<String> combinations)
+    {
+        if (digit == digits.length())
+        {
+            combinations.add(new String(combination));
+        }
+        else
+        {
+            for (char letter : letters.get(digits.charAt(digit)))
+            {
+                combination[digit] = letter;
+                combinationHelper(digits, letters, combination, digit + 1, combinations);
+            }
+        }
+    }
+    
+    private HashMap<Character, char[]> digits()
+    {
+        HashMap<Character, char[]> chars = new HashMap<>();
+        
+        chars.put('0', new char[] {'0'});
+        chars.put('1', new char[] {'1'});
+        chars.put('2', new char[] {'a','b','c'});
+        chars.put('3', new char[] {'d','e','f'});
+        chars.put('4', new char[] {'g','h','i'});
+        chars.put('5', new char[] {'j','k','l'});
+        chars.put('6', new char[] {'m','n','o'});
+        chars.put('7', new char[] {'p','q','r', 's'});
+        chars.put('8', new char[] {'t','u','v'});
+        chars.put('9', new char[] {'w','x','y','z'});
+        
+        return chars;
+    }
+}
+
+////////////////////////// Unique Paths
+// Recursion
+
+class Solution {
+    public int uniquePaths(int m, int n) 
+    {
+        return backtrack(m, n, 0, 0);
+    }
+    
+    private int backtrack(int m, int n, int row, int column)
+    {
+        if (row == m - 1 && column == n - 1) return 1;
+        if (row >= m || column >= n) return 0;
+        
+        return backtrack(m, n, row + 1, column) + backtrack(m, n, row, column + 1);
+    }
+}
+
+// Memoization
+class Solution {
+    public int uniquePaths(int m, int n) 
+    {
+        int[][] matrix = new int [m + 1][n + 1];
+        for (int i = 0; i < m + 1; i++)
+        {
+            for (int j = 0; j < n + 1; j++)
+            {
+                matrix[i][j] = -1;
+            }
+        }
+        return backtrack(m, n, 0, 0, matrix);
+    }
+    
+    private int backtrack(int m, int n, int row, int column, int[][] matrix)
+    {
+        if (row == m - 1 && column == n - 1) return 1;
+        if (row >= m || column >= n) return 0;
+        
+        if (matrix[row + 1][column] == -1)
+            matrix[row + 1][column] = backtrack(m, n, row + 1, column, matrix);
+        
+        if (matrix[row][column + 1] == -1)
+            matrix[row][column + 1] = backtrack(m, n, row, column + 1, matrix);
+        
+        return matrix[row + 1][column] + matrix[row][column + 1];
+    }
+}
+
+// Bottom up
+class Solution {
+    public int uniquePaths(int m, int n) 
+    {
+        int[][] matrix = new int [m + 1][n + 1];
+        matrix[m - 1][n] = 1;
+        
+        for (int row = m - 1; row >= 0; row--)
+        {
+            for (int column = n - 1; column >= 0; column--)
+            {
+                matrix[row][column] = matrix[row + 1][column] + matrix[row][column + 1];
+            }
+        }
+        return matrix[0][0];
+    }
+}
+
+/////////////////////// Unique Paths II
+
+public int uniquePathsWithObstacles(int[][] obstacleGrid) 
+{
+    int m = obstacleGrid.length;
+    if (m == 0) return 0;
+    
+    int n = obstacleGrid[0].length;        
+    int[][] matrix = new int [m + 1][n + 1];
+    matrix[m - 1][n] = 1;
+    
+    for (int row = m - 1; row >= 0; row--)
+    {
+        for (int column = n - 1; column >= 0; column--)
+        {
+            matrix[row][column] = (obstacleGrid[row][column] == 1) ? 0 : matrix[row + 1][column] + matrix[row][column + 1];
+        }
+    }
+    return matrix[0][0];
+}
