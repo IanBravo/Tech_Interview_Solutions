@@ -2244,4 +2244,49 @@ class Solution {
         
         return sumHelper(node.left, sum * 10 + node.val) + sumHelper(node.right, sum * 10 + node.val);
     }
+
+///////////////////////// Distinct Subsequences
+
+public int numDistinct(String s, String t) 
+{
+    int[][] dp = new int[s.length() + 1][t.length() + 1];
+    
+    for (int i = 0; i <= s.length(); i++) dp[i][0] = 1;
+    
+    for (int i = 1; i <= s.length(); i++)
+    {
+        for (int j = 1; j<= t.length(); j++)
+        {
+            if (s.charAt(i - 1) == t.charAt(j - 1))
+                dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
+            else
+                dp[i][j] = dp[i - 1][j];
+        }
+    }
+    
+    return dp[s.length()][t.length()];
+}
+
+//////////////////////// Edit Distance
+
+public int minDistance(String word1, String word2) 
+{
+    int m = word1.length();
+    int n = word2.length();        
+    int[][] cost = new int[m + 1][n + 1];
+    
+    for (int i = 0; i <= m; i++) cost[i][0] = i;
+    for (int i = 1; i <= n; i++) cost[0][i] = i;
+    
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (word1.charAt(i) == word2.charAt(j))
+                cost[i + 1][j + 1] = cost[i][j];
+            else
+                cost[i + 1][j + 1] = Math.min(Math.min(cost[i][j], cost[i][j + 1]), cost[i + 1][j]) + 1;
+        }
+    }
+    return cost[m][n];
 }
