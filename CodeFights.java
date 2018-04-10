@@ -2290,3 +2290,19 @@ public int minDistance(String word1, String word2)
     }
     return cost[m][n];
 }
+
+///////////////////// Flatten Binary Tree to Linked List
+
+class Solution {
+    private TreeNode helper = null;
+    
+    public void flatten(TreeNode root) 
+    {
+        if (root == null) return;
+        flatten(root.right);
+        flatten(root.left);
+        root.right = helper;
+        root.left = null;
+        helper = root;
+    }
+}
