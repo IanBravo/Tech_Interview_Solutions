@@ -2226,3 +2226,22 @@ int longestCommonSubsequence(String s, String t)
     
     return dp[m][n];
 }
+
+////////////////////// Sum Root to Leaf Numbers
+
+class Solution {
+    
+    public int sumNumbers(TreeNode root) 
+    {
+        return sumHelper(root, 0);
+    }
+    
+    public int sumHelper(TreeNode node, int sum)
+    {
+        if (node == null) return 0;
+        if (node.right == null && node.left == null)
+            return sum * 10 + node.val;
+        
+        return sumHelper(node.left, sum * 10 + node.val) + sumHelper(node.right, sum * 10 + node.val);
+    }
+}
