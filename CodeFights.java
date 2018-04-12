@@ -2330,3 +2330,21 @@ class Solution {
         directedPowerSet(nums, toBeSelected + 1, selectedSoFar, powerSet);
     }
 }
+
+////////////////// Two Sum
+public int[] twoSum(int[] nums, int target) 
+{
+    if (nums.length < 2) return new int[] {};
+    
+    HashMap<Integer, Integer> map = new HashMap<>();
+    
+    for (int i = 0; i < nums.length; i++)
+    {
+        if (map.containsKey(target - nums[i]))
+            return new int[] {map.get(target - nums[i]), i};
+        
+        if (!map.containsKey(nums[i])) map.put(nums[i], i);
+    }
+    
+    return new int[] {};
+}
