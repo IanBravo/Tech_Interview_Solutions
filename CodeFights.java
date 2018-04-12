@@ -2306,3 +2306,27 @@ class Solution {
         helper = root;
     }
 }
+
+/////////////////// Subsets
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) 
+    {
+        List<List<Integer>> powerSet = new ArrayList<>();
+        directedPowerSet(nums, 0, new ArrayList<Integer>(), powerSet);
+        return powerSet;
+    }
+    
+    static void directedPowerSet(int[] nums, int toBeSelected, List<Integer> selectedSoFar, List<List<Integer>> powerSet)
+    {
+        if (toBeSelected == nums.length)
+        {
+            powerSet.add(new ArrayList<>(selectedSoFar));
+            return;
+        }
+        
+        selectedSoFar.add(nums[toBeSelected]);
+        directedPowerSet(nums, toBeSelected + 1, selectedSoFar, powerSet);
+        selectedSoFar.remove(selectedSoFar.size() - 1);
+        directedPowerSet(nums, toBeSelected + 1, selectedSoFar, powerSet);
+    }
+}
