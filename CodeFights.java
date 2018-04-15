@@ -2437,3 +2437,29 @@ public double myPow(double x, int y)
     }
     return result;
 }
+
+/////////////////// Plus One
+static List<Integer> plusOne(List<Integer> num)
+{
+    if (num.size() == 0) return num;
+    
+    int size = num.size() - 1;
+    int temp = 0;
+    int carry = 0;
+    
+    temp = num.get(size) + 1;
+    carry = temp / 10;
+    temp %= 10;
+    num.set(size, temp);
+    
+    for (int i = size - 1; i >= 0; i--)
+    {
+        temp = num.get(i) + carry;
+        carry = temp / 10;
+        temp %= 10;
+        num.set(i, temp);
+    }
+    
+    if (carry > 0) num.add(0, 1);
+    return num;
+}
