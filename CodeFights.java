@@ -2416,19 +2416,16 @@ public List<Integer> spiralOrder(int[][] matrix)
 }
 
 ///////////////////// Pow
-public double myPow(double x, int y) 
-{
+public double myPow(double x, int y) {
     double result = 1.0;
     long power = y;
     
-    if (y < 0)
-    {
+    if (y < 0) {
         power = -power;
         x = 1.0 / x;
     }
     
-    while (power != 0)
-    {
+    while (power != 0) {
         if ((power & 1) != 0) 
             result *= x;
         
@@ -2476,4 +2473,78 @@ public boolean isPalindrome(String s)
         if (Character.toLowerCase(s.charAt(start++)) != Character.toLowerCase(s.charAt(end--))) return false;
     }
     return true;
+}
+
+////////////////// longest consecutive sequence
+//O(n^2)
+public static int MaxConsecutive(int[] arr) {
+    if (arr.length == 0) {
+        return 0;
+    }
+    
+    if (arr.length == 1) {
+        return arr[0];
+    }
+    
+    int maxLength = 0;
+    
+    for (int i = 0; i < arr.length; i++) {
+        int temp = 1;
+        
+        for (int j = i + 1; j < arr.length; j++) {
+            if (arr[i] < arr[j]) {
+                temp++;
+            }
+        }
+        maxLength = Math.max(maxLength, temp);
+    }
+    return maxLength;
+}
+//O(n)
+public static int MaxConsecutive(int[] arr) {
+    HashSet<Integer> values = new HashSet<>();
+    for (int i : arr) {
+        values.add(i);
+    }
+    
+    int max = 0;
+    for (int i : values) {
+        if (values.contains(i - 1)) continue;
+        int length = 0;
+        while (values.contains(i++)) length++;
+        max = Math.max(max, length);
+    }
+    return max;
+}
+
+////////////////// Sum in sorted array
+//O(n)
+public static boolean SumInSortedArray(int[] arr, int sum) {
+    if (arr.length == 0) {
+        return false;
+    }
+    
+    if (arr.length == 1) {
+        if (arr[0] == sum) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    int start = 0;
+    int end = arr.length - 1;
+    
+    while (start < end) {
+        if ((arr[start] + arr[end]) == sum) {
+            return true;
+        }
+        
+        if ((arr[start] + arr[end]) > sum) {
+            end--;
+        } else {
+            start++;
+        }
+    }
+    return false;
 }
