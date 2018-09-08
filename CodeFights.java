@@ -2523,7 +2523,7 @@ public static boolean SumInSortedArray(int[] arr, int sum) {
     if (arr.length == 0) {
         return false;
     }
-    
+
     if (arr.length == 1) {
         if (arr[0] == sum) {
             return true;
@@ -2531,10 +2531,10 @@ public static boolean SumInSortedArray(int[] arr, int sum) {
             return false;
         }
     }
-    
+
     int start = 0;
     int end = arr.length - 1;
-    
+
     while (start < end) {
         if ((arr[start] + arr[end]) == sum) {
             return true;
@@ -2547,4 +2547,143 @@ public static boolean SumInSortedArray(int[] arr, int sum) {
         }
     }
     return false;
+}
+////////////////// Longest Continuous Increasing Subsequence
+//O(n)
+public int findLengthOfLCIS(int[] nums) {
+    if (nums.length == 0) return 0;
+    if (nums.length == 1) return 1;
+
+    int p1 = 0;
+    int p2 = 1;
+    int max = 0;
+    int temp = 1;
+
+    while (p2 < nums.length) {
+        if (nums[p2] <= nums[p1]) {
+            max = Math.max(max, temp);
+            temp = 1;
+        } else {
+            temp++;
+        }
+        p1++;
+        p2++;
+    }
+    return Math.max(max, temp);
+}
+
+public static String reverseSentence(String sentence)
+{
+    if (sentence.length() == 0) return sentence;
+    
+    StringBuilder res = new StringBuilder();
+    StringBuilder word = new StringBuilder();
+    
+    for (int i = sentence.length() - 1; i >= 0; i--)
+    {
+        if (sentence.charAt(i) == ' ' && word.length() > 0)
+        {
+            res.append(word.reverse().toString());
+            res.append(' ');
+            word.delete(0, word.length());
+        }
+        else
+        {
+            if (sentence.charAt(i) != ' ')
+            {
+                word.append(sentence.charAt(i));
+            }
+        }
+    }
+
+    res.append(word.reverse().toString());  
+    return res.toString();
+}
+
+/// Sum the root-to-lead paths in a ninary tree
+public static List<Integer> sumPaths(TreeNode head)
+{
+    List<Integer> sums = new ArrayList<>();
+    int sum = 0;
+    sums(head, sums, sum);
+    return sums;
+}
+
+private static void sums(TreeNode node, List<Integer> sums, int sum)
+{
+    if (node == null) return;
+    if (node.left == null && node.right == null) sums.add(sum + node.val);
+    sums(node.left, sums, sum + node.val);
+    sums(node.right, sums, sum + node.val);
+}
+
+///// Binary Tree Vertical Order Traversal
+static int max = 0, min = 0;
+
+public static List<List<Integer>> vertical(TreeNode root)
+{
+    if (root == null) return new ArrayList<List<Integer>>();
+    
+    HashMap<Integer, List<Integer>> map = new HashMap<>();
+    List<List<Integer>> res = new ArrayList<List<Integer>>();
+    nodesInPosition(root, map, 0);
+    for (int i = min; i <= max; i++) res.add(map.get(i));
+    return res;
+}
+
+private static void nodesInPosition(TreeNode node, HashMap<Integer, List<Integer>> map, int pos)
+{
+    if (node != null)
+    {
+        List<Integer> temp = map.containsKey(pos) ? map.get(pos) : new ArrayList<Integer>();
+        temp.add(node.val);
+        map.put(pos, temp);
+        min = Math.min(pos, min);
+        max = Math.max(pos, max);
+        nodesInPosition(node.left, map, pos - 1);
+        nodesInPosition(node.right, map, pos + 1);          
+    }
+}
+
+///// minimum window
+public static int minWindow(String s, String t) 
+{
+     int[] map = new int[256];
+     for (char c : t.toCharArray()) map[c]++;
+     int counter = t.length(), start = 0, end = 0, distance = Integer.MAX_VALUE;
+     
+     while (end < s.length())
+     {
+         if (map[s.charAt(end++)]-- > 0) counter--;
+         while (counter == 0)
+         {
+             if (end - start < distance) distance = end - start;
+             if (map[s.charAt(start++)]++ == 0) counter++;
+         }
+     }
+     
+     return distance == Integer.MAX_VALUE ? 0 : distance;
+}
+
+//// Level Order Traversal
+public static List<List<Integer>> levelTraversal(TreeNode root)
+{
+    if (root == null) return new ArrayList<List<Integer>>();
+    
+    HashMap<Integer, List<Integer>> levels = new HashMap<>();
+    nodesPerLevel(0, levels, root); 
+    List<List<Integer>> traversal = new ArrayList<List<Integer>>();
+    
+    for (int i = 0; i < levels.size(); i++) traversal.add(levels.get(i));
+    return traversal;
+}
+
+private static void nodesPerLevel(int level, HashMap<Integer, List<Integer>> levels, TreeNode node)
+{
+    if (node == null) return;
+    List<Integer> curr = levels.containsKey(level) ? levels.get(level) : new ArrayList<Integer>();
+    curr.add(node.val);
+    levels.put(level, curr);
+    nodesPerLevel(level + 1, levels, node.left);
+    nodesPerLevel(level + 1, levels, node.right);
 }
