@@ -2687,3 +2687,32 @@ private static void nodesPerLevel(int level, HashMap<Integer, List<Integer>> lev
     nodesPerLevel(level + 1, levels, node.left);
     nodesPerLevel(level + 1, levels, node.right);
 }
+
+///// BST from preorder traversal
+
+public static TreeNode BSTfromTraversal(int[] preorder)
+{
+    if (preorder.length == 0) return null;
+    TreeNode root = new TreeNode(preorder[0]);
+    Stack<TreeNode> stack = new Stack<>();
+    stack.push(root);
+
+    for (int i = 1; i < preorder.length; i++)
+    {
+        TreeNode curr = null;
+        while (!stack.isEmpty() && preorder[i] > stack.peek().val) curr = stack.pop();
+
+        if (curr != null)
+        {
+            curr.right = new TreeNode(preorder[i]);
+            stack.push(curr.right);
+        }
+        else
+        {
+            curr = stack.peek();
+            curr.left = new TreeNode(preorder[i]);
+            stack.push(curr.left);
+        }
+    }
+    return root;
+}
