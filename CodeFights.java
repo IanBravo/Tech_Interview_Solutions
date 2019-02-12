@@ -2689,7 +2689,6 @@ private static void nodesPerLevel(int level, HashMap<Integer, List<Integer>> lev
 }
 
 ///// BST from preorder traversal
-
 public static TreeNode BSTfromTraversal(int[] preorder)
 {
     if (preorder.length == 0) return null;
@@ -2715,4 +2714,598 @@ public static TreeNode BSTfromTraversal(int[] preorder)
         }
     }
     return root;
+}
+
+////// Largest Sum in Contiguous Sequence
+////// O(n)
+public static int largestContiguousSum(int[] arr)
+{
+    if (arr.length == 0) return 0;
+    if (arr.length == 1) return arr[0];
+    
+    int p1 = 0, p2 = 1, largest = 0, temp = arr[0];
+    
+    while(p2 < arr.length)
+    {
+        if (temp + arr[p2] < 0)
+        {
+            largest = Math.max(largest, temp);
+            p1 = p2;
+            p2++;
+            temp = arr[p1];
+        }
+        else
+        {
+            temp += arr[p2];
+            p2++;
+        }
+    }
+    return Math.max(largest, temp);
+}
+
+////// Longest Increasing Contiguous Subarray
+////// Time: O(n) Space: O(1)
+public static List<Integer> LICS(int[] nums) 
+{
+    List<Integer> result = new ArrayList<>();
+    if (nums.length < 2) return result;
+    
+    int p1 = 0, p2 = 1, length = 1, start = 0, end = 0;
+    
+    while (p2 < nums.length)
+    {
+        if (nums[p2 - 1] > nums[p2])
+        {
+            if (p2 - p1> length)
+            {
+                length = p2 - p1;
+                start = p1;
+                end = p2 - 1;                   
+            }
+            p1 = p2;
+            p2++;
+        }
+        else
+        {
+            p2++;
+        }
+    }
+    
+    if (p2 - p1> length)
+    {
+        start = p1;
+        end = p2 - 1;
+    }
+    result.add(start);
+    result.add(end);
+    return result;
+} 
+
+////// minimun distance from origin to points
+////// Time: O(p log d) Space: O(p)
+////// p = points, d = distances;
+public static List<List<Integer>> closestPoints(List<Integer> origin, List<List<Integer>> points, int k)
+{
+    List<List<Integer>> closest = new ArrayList<>();
+    if (k == 0 || points.isEmpty() || origin.isEmpty()) return closest;
+    
+    Map<Double, List<List<Integer>>> distances = new TreeMap<>();
+    
+    for (List<Integer> point : points)
+    {
+        double distance = calculateDistance(origin.get(0), origin.get(1), point.get(0), point.get(1));
+        List<List<Integer>> distancePoints = distances.containsKey(distance) ? distances.get(distance) 
+                                                                             : new ArrayList<>();
+        distancePoints.add(point);
+        distances.put(distance, distancePoints);                        
+    }
+    int i = 0;
+    for (Map.Entry<Double, List<List<Integer>>> distance : distances.entrySet())
+    {
+        if (i == k) break;
+        List<List<Integer>> distancePoints = distance.getValue();
+        if (distancePoints.size() > 1)
+        {
+            for (List<Integer> dist : distancePoints)
+            {
+                if (i == k) break;
+                i++;
+                closest.add(dist);
+            }
+        }
+        else
+        {
+            i++;
+            closest.add(distancePoints.get(0));
+        }
+    }
+    return closest;
+}
+
+private static double calculateDistance(int x1, int y1, int x2, int y2)
+{
+    return Math.sqrt(Math.pow((double)(x2 - x1), 2) + Math.pow((double)(y2 - y1), 2));
+}
+
+
+
+////// LeetCode 199. Binary Tree Right Side View
+////// Time: O(n) Space: O(n)
+public static List<Integer> rightSideView(TreeNode root)
+{
+    if (root == null) return new ArrayList<Integer>();
+    Queue<TreeNode> queue = new ArrayDeque<>();
+    List<Integer> result = new ArrayList<>();
+    queue.add(root);
+    
+    while (!queue.isEmpty())
+    {
+        int size = queue.size();
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode curr = queue.poll();
+            if (i == size - 1) result.add(curr.val);
+            if (curr.left != null) queue.add(curr.left);
+            if (curr.right != null) queue.add(curr.right);
+        }
+    }
+    return result;
+}
+
+////// LeetCode 102. Binary Tree Level Order Traversal
+////// Time: O(n) Space: O(n)
+public static List<List<Integer>> levelOrderTraversal(TreeNode root)
+{
+    if (root == null) return new ArrayList<List<Integer>>();
+    Queue<TreeNode> queue = new ArrayDeque<>();
+    List<List<Integer>> result = new ArrayList<>();
+    queue.add(root);
+    
+    while (!queue.isEmpty())
+    {
+        int size = queue.size();
+        List<Integer> nodesInLevel = new ArrayList<>();
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode curr = queue.poll();
+            nodesInLevel.add(curr.val);
+            if (curr.left != null) queue.add(curr.left);
+            if (curr.right != null) queue.add(curr.right);
+        }
+        result.add(nodesInLevel);
+    }
+    return result;
+}
+
+////// Zero Matrix
+////// Time: O(matrix * result) Space: O(result)
+public static boolean[][] zeroMatrix(boolean[][] matrix)
+{
+    if (matrix.length == 0) return matrix;
+    
+    boolean[][] result = new boolean[matrix.length][matrix[0].length];
+    
+    for (int i = 0; i < matrix.length; i++)
+    {
+        for (int j = 0; j < matrix[i].length; j++)
+        {
+            if (matrix[i][j] == true)
+            {
+                result[i][j] = true;
+                updateResult(result, i, j);
+            }
+        }
+    }
+    return result;
+}
+
+private static void updateResult(boolean[][] result, int i, int j)
+{
+    int col = j;
+    int row = i;
+    
+    row--;
+    for (; row >= 0; row--)
+        result[row][col] = true;
+    row = i;
+    
+    col++;
+    for (; col < result[i].length; col++)
+        result[row][col] = true;
+    col = j;
+    
+    row++;
+    for (; row < result.length; row++)
+        result[row][col] = true;
+    row = i;
+    
+    col--;
+    for (; col >= 0; col++)
+        result[row][col] = true;
+}
+
+////// Dutch National Flag
+////// Time: O(n) Space: O(1)
+public static int[] dutchNationalFlag(int[] arr, int x)
+{
+    if (arr == null || arr.length == 0 || x > arr.length) return arr;
+    
+    int pivot = arr[x];
+    int low = -1, mid = -1, high = arr.length;
+    
+    while (mid + 1 < high)
+    {
+        if (arr[mid + 1] > pivot)
+        {
+            swap(arr, high - 1, mid + 1);
+            high--;
+        }
+        else if (arr[mid + 1] == pivot)
+        {
+            mid++;
+        }
+        else
+        {
+            swap(arr, mid + 1, low + 1);
+            mid++;
+            low++;
+        }
+    }
+    return arr;
+}
+
+////// Red White Blue
+////// Time: O(n) Space: O(1)
+public static int[] redWhiteBlue(int[] arr)
+{
+    if (arr == null || arr.length == 0) return arr;
+    
+    int low = -1, mid = -1, high = arr.length;
+    
+    while (mid + 1 < high)
+    {
+        if (arr[mid + 1] == 2)
+        {
+            swap(arr, high - 1, mid + 1);
+            high--;
+        }
+        else if (arr[mid + 1] == 1)
+        {
+            mid++;
+        }
+        else
+        {
+            swap(arr, mid + 1, low + 1);
+            mid++;
+            low++;
+        }
+    }
+    return arr;
+}
+
+////// Subarray sum to x
+////// Time: O(n) Space: O(1)
+public static List<Integer> contSubArraySum(int[] arr, int x)
+{
+    List<Integer> notFound = new ArrayList<>();
+    notFound.add(-1);
+    notFound.add(-1);
+    
+    if (arr == null || arr.length == 0) return notFound;
+    
+    int start = 0, end = 0;
+    int sum = arr[0];
+    
+    while (start < arr.length)
+    {
+        if (sum < x)
+        {
+            end++;
+            if (end < arr.length) sum += arr[end];
+        }
+        else if (sum > x)
+        {
+            if (start < arr.length) sum -= arr[start];
+            start++;                
+        }
+        else
+        {
+            List<Integer> result = new ArrayList<>();
+            result.add(start);
+            result.add(end);
+            return result;
+        }
+    }
+    return notFound;
+}
+
+////// Subarray sum to 0
+////// Time: O(n) Space: O(n)
+public static List<Integer> subArraySumZero(int[] arr)
+{
+    List<Integer> notFound = new ArrayList<>();
+    notFound.add(-1);
+    notFound.add(-1);
+    
+    if (arr == null || arr.length == 0) return notFound;
+    
+    HashMap<Integer, Integer> map = new HashMap<>();
+    int sum = 0;
+    List<Integer> res = new ArrayList<>();
+    
+    for (int i = 0; i < arr.length; i++)
+    {
+        sum += arr[i];
+        if (sum == 0)
+        {
+            res.add(0);
+            res.add(i);
+            return res;
+        }
+        else if (map.containsKey(sum))
+        {
+            res.add(map.get(sum) + 1);
+            res.add(i);
+            return res;
+        }
+        else
+        {
+            map.put(sum, i);
+        }
+    }
+    
+    return notFound;
+}
+
+////// Subarray sum to x
+////// Time: O(n) Space: O(n)
+public static List<Integer> subArraySum(int[] arr, int x)
+{
+    List<Integer> notFound = new ArrayList<>();
+    notFound.add(-1);
+    notFound.add(-1);
+    
+    if (arr == null || arr.length == 0) return notFound;
+    
+    HashMap<Integer, Integer> map = new HashMap<>();
+    int sum = 0;
+    List<Integer> res = new ArrayList<>();
+    
+    for (int i = 0; i < arr.length; i++)
+    {
+        sum += arr[i];
+        if (sum - x == 0)
+        {
+            res.add(0);
+            res.add(i);
+            return res;
+        }
+        else if (map.containsKey(sum - x))
+        {
+            res.add(map.get(sum - x) + 1);
+            res.add(i);
+            return res;
+        }
+        else
+        {
+            map.put(sum, i);
+        }
+    }
+    
+    return notFound;
+}
+
+////// Move Zeroes
+////// Time: O(n) Space: O(1)
+public static int[] moveZeroes(int[] arr)
+{
+    if (arr == null || arr.length == 0) return arr;
+    
+    int mid = -1, high = arr.length;
+    
+    while (mid + 1 < high)
+    {
+        if (arr[mid + 1] == 0)
+        {
+            swap(arr, high - 1, mid + 1);
+            high--;
+        }
+        else
+        {
+            mid++;
+        }
+    }
+    return arr;
+}
+
+////// Generate Combinations using Auxiliary Buffer
+////// Time: Exponential Space: O(X) buffer and recursion stack
+public static void printCombos(int[] arr, int[] buffer, int startIndex, int bufferIndex)
+{
+    if (bufferIndex == buffer.length)
+    {
+        printArray(buffer);
+        return;
+    }
+    
+    if (startIndex == arr.length) return;
+    
+    for (int i = startIndex; i < arr.length; i++)
+    {
+        buffer[bufferIndex] = arr[i];
+        printCombos(arr, buffer, startIndex + 1, bufferIndex + 1);
+    }
+}
+
+////// Generate Phone Number Mnemonics
+////// Time: Exponential Space: O(X) buffer and recursion stack
+public static void phoneNumberMnemonics(int[] arr, char[] buffer, int nextIndex, int bufferIndex)
+{
+    if (bufferIndex == buffer.length)
+    {
+        printWord(buffer);
+        return;
+    }
+    
+    char[] letters = getLetters(arr[nextIndex]);
+    
+    if (letters.length == 0)
+        phoneNumberMnemonics(arr, buffer, nextIndex + 1, bufferIndex);
+    
+    for (char letter : letters)
+    {
+        buffer[bufferIndex] = letter;
+        phoneNumberMnemonics(arr, buffer, nextIndex + 1, bufferIndex + 1);
+    }
+}
+
+////// Generate Permutations
+////// Time: Exponential Space: O(X) buffer, boolean buffer and recursion stack
+public static void generatePermutations(int[] arr, int[] buffer, int bufferIndex, boolean[] isInBuffer)
+{
+    if (bufferIndex == buffer.length)
+    {
+        printArray(buffer);
+        return;
+    }
+    
+    for (int i = 0; i < arr.length; i++)
+    {
+        if (!isInBuffer[i])
+        {
+            buffer[bufferIndex] = arr[i];
+            isInBuffer[i] = true;
+            generatePermutations(arr, buffer, bufferIndex + 1, isInBuffer);
+            isInBuffer[i] = false;
+        }
+    }
+}
+
+////// Coin Change
+////// Time: Exponential Space: O(X) buffer and recursion stack
+public static void coinChange(int[] coins, int target, int startIndex, Stack<Integer> buffer, int sum)
+{
+    if (sum == target)
+    {
+        printChange(buffer);
+        return;
+    }
+    
+    if (sum > target) return;
+    
+    for (int i = startIndex; i < coins.length; i++)
+    {
+        buffer.push(coins[i]);
+        coinChange(coins, target, i, buffer, sum + coins[i]);
+        buffer.pop();
+    }
+}
+
+////// Matrix Product
+////// Time: Exponential Space: O(n^2)
+public static int matrixProduct(int[][] matrix, int i, int j, int product)
+{
+    if (oob(matrix, i, j))
+        return 1;
+    
+    if (i == matrix.length - 1 && j == matrix.length - 1)
+        return product * matrix[i][j];
+    
+    return Math.max(matrixProduct(matrix, i + 1, j, product * matrix[i][j]), matrixProduct(matrix, i, j + 1, product * matrix[i][j]));
+}
+
+////// Sliding Window Sum
+////// Time: O(n) Space: O(n)
+public static void slidingWindowSum(int[] a, int k)
+{
+    if (a == null || k == 0 || a.length == 0) return;
+    
+    Queue<Integer> queue = new LinkedList<>();
+    int sum = 0;
+    
+    for (int i = 0 ; i < a.length; i++)
+    {
+        if (queue.size() == k)
+            sum -= queue.poll();
+        
+        queue.add(a[i]);
+        sum += a[i];
+        if (queue.size() == k)
+            System.out.println(sum);
+    }
+}
+
+////// Max Queue
+////// Time: O(1) look up max, Space: O(n)
+public class QueueMax
+{
+    Queue<Integer> main;
+    Deque<Integer> max;
+    
+    public QueueMax()
+    {
+        main = new LinkedList<>();
+        max = new LinkedList<>();
+    }
+    
+    public void enqueue(int item)
+    {
+        main.add(item);
+        while (!max.isEmpty() && max.getLast() < item)
+            max.removeLast();
+        max.add(item);
+    }
+    
+    public int dequeue() throws Exception
+    {
+        if (main.isEmpty()) throw new Exception();
+        
+        int item = main.poll();
+        if (max.getFirst() == item)
+            max.remove();
+        return item;
+    }
+    
+    public int max() throws Exception
+    {
+        if (max.isEmpty()) throw new Exception();
+        return max.getFirst();
+    }
+}
+
+////// Sliding Window Max
+////// Time: O(n) Space: O(n)
+public static void slidingWindowMax(int[] a, int k)
+{
+    if (a == null || k == 0 || a.length == 0) return;
+    //Using custom Queue Max data structure
+    QueueMax queue = new QueueMax();
+    
+    for (int i = 0 ; i < a.length; i++)
+    {
+        if (queue.size() == k)
+        {
+            try
+            {
+                queue.dequeue();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        
+        queue.enqueue(a[i]);
+        if (queue.size() == k)
+        {
+            try
+            {
+                System.out.println(queue.max());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }               
+    }
 }
