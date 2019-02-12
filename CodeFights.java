@@ -3241,11 +3241,18 @@ public class QueueMax
 {
     Queue<Integer> main;
     Deque<Integer> max;
+    int size;
     
     public QueueMax()
     {
         main = new LinkedList<>();
         max = new LinkedList<>();
+        size = 0;
+    }
+    
+    public int size()
+    {
+        return size;
     }
     
     public void enqueue(int item)
@@ -3254,6 +3261,7 @@ public class QueueMax
         while (!max.isEmpty() && max.getLast() < item)
             max.removeLast();
         max.add(item);
+        size++;
     }
     
     public int dequeue() throws Exception
@@ -3261,6 +3269,7 @@ public class QueueMax
         if (main.isEmpty()) throw new Exception();
         
         int item = main.poll();
+        size--;
         if (max.getFirst() == item)
             max.remove();
         return item;
