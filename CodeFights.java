@@ -3364,3 +3364,37 @@ private static void reverseArray(int[] a, int start, int end)
         end--;
     }
 }
+
+////// Print Matrix Zig Zag
+////// Time: O(mn) Space: O(1)
+public static void matrixZigZag(int[][] matrix)
+{
+    if (matrix == null || matrix.length == 0 || matrix.length != matrix[0].length) return;
+    
+    int i = 0, j = 0;
+    
+    System.out.print(matrix[i][j] + " ");
+    
+    while (i <= matrix.length - 1 && j <= matrix.length - 1)
+    {
+        if (j < matrix.length - 1)
+            System.out.print(matrix[i][++j] + " ");
+        else
+            System.out.print(matrix[++i][j] + " ");
+        
+        if (i == matrix.length - 1 && j == matrix.length - 1) break;
+        
+        while (j > 0 && i < matrix.length - 1)
+            System.out.print(matrix[++i][--j] + " ");
+        
+        if (j < matrix.length && j == 0)
+            System.out.print(matrix[++i][j] + " ");
+        else
+            System.out.print(matrix[i][++j] + " ");
+        
+        if (i == matrix.length - 1 && j == matrix.length - 1) break;
+        
+        while (i > 0 && j < matrix.length - 1)
+            System.out.print(matrix[--i][++j] + " ");
+    }
+}
