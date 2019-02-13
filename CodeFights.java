@@ -3318,3 +3318,25 @@ public static void slidingWindowMax(int[] a, int k)
         }               
     }
 }
+
+////// Generate Anagrams
+////// Time: Exponential Space: O(X) buffer, boolean buffer and recursion stack
+public static void anagrams(char[] arr, char[] buffer, int bufferIndex, boolean[] isInBuffer)
+{
+    if (bufferIndex == buffer.length)
+    {
+        printWord(buffer);
+        return;
+    }
+    
+    for (int i = 0; i < arr.length; i++)
+    {
+        if (!isInBuffer[i])
+        {
+            buffer[bufferIndex] = arr[i];
+            isInBuffer[i] = true;
+            anagrams(arr, buffer, bufferIndex + 1, isInBuffer);
+            isInBuffer[i] = false;
+        }
+    }
+}
