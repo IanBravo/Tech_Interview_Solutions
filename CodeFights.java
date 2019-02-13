@@ -3340,3 +3340,27 @@ public static void anagrams(char[] arr, char[] buffer, int bufferIndex, boolean[
         }
     }
 }
+
+////// Rotate Array by X
+////// Time: O(n) Space: O(1)
+public static int[] rotateArray(int[] a, int x)
+{
+    if (a == null || a.length == 0 || x > a.length) return a;
+    
+    reverseArray(a, 0, a.length - 1);
+    reverseArray(a, 0, x - 1);
+    reverseArray(a, x, a.length - 1);
+    return a;
+}
+
+private static void reverseArray(int[] a, int start, int end)
+{
+    while (start < end)
+    {
+        int temp = a[start];
+        a[start] = a[end];
+        a[end] = temp;
+        start++;
+        end--;
+    }
+}
