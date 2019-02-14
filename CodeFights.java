@@ -3387,7 +3387,7 @@ public static void matrixZigZag(int[][] matrix)
         while (j > 0 && i < matrix.length - 1)
             System.out.print(matrix[++i][--j] + " ");
         
-        if (j < matrix.length && j == 0)
+        if (i < matrix.length - 1 && j == 0)
             System.out.print(matrix[++i][j] + " ");
         else
             System.out.print(matrix[i][++j] + " ");
