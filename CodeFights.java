@@ -3454,3 +3454,39 @@ public static int closestToTarget(int[] a, int target)
     }
     return closest;
 }
+
+////// Spiral Matrix
+////// Time: O(mn) Space: O(1)
+public static void printSpiralMatrix(int[][] a)
+{
+    if (a == null || a.length == 0 || a[0].length == 0) return;
+    
+    int left = 0, right = a[0].length - 1, up = 0, down = a.length - 1;
+    
+    while (up <= down && left <= right)
+    {
+        //right
+        for (int i = left; i <= right; i++)
+            System.out.print(a[up][i] + " ");
+        up++;
+        
+        //down
+        for (int i = up; i <= down; i++)
+            System.out.print(a[i][right] + " ");
+        right--;
+        
+        //break in case of rectangle
+        if (up == down || left == right) break;
+        
+        //left
+        for (int i = right; i >= left; i--)
+            System.out.print(a[down][i] + " ");
+        down--;
+        
+        //up
+        for (int i = down ; i >= up; i--)
+            System.out.print(a[i][left] + " ");
+        left++;
+        
+    }
+}
