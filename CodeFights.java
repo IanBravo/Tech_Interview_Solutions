@@ -3468,25 +3468,27 @@ public static void printSpiralMatrix(int[][] a)
         //right
         for (int i = left; i <= right; i++)
             System.out.print(a[up][i] + " ");
-        up++;
+        
+        if (++up > down) break;
         
         //down
         for (int i = up; i <= down; i++)
             System.out.print(a[i][right] + " ");
-        right--;
         
-        //break in case of rectangle
-        if (up == down || left == right) break;
+        if (--right < left) break;
+        
         
         //left
         for (int i = right; i >= left; i--)
             System.out.print(a[down][i] + " ");
-        down--;
+        
+        if (--down < up) break;
         
         //up
         for (int i = down ; i >= up; i--)
             System.out.print(a[i][left] + " ");
-        left++;
+        
+        if (++left > right) break;
         
     }
 }
