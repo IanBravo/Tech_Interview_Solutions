@@ -3477,7 +3477,6 @@ public static void printSpiralMatrix(int[][] a)
         
         if (--right < left) break;
         
-        
         //left
         for (int i = right; i >= left; i--)
             System.out.print(a[down][i] + " ");
@@ -3491,4 +3490,44 @@ public static void printSpiralMatrix(int[][] a)
         if (++left > right) break;
         
     }
+}
+
+////// String Search
+////// Time: O(n) Space: O(1)
+public static int search(String str, String target) //Rabin-Karp
+{
+    if (str == null || target == null)
+        throw new NullPointerException();
+    
+    if (target.isEmpty()) return 0;
+    if (target.length() > str.length()) return - 1;
+    
+    //prime number
+    int x = 53;
+    
+    //calculate hash for first target.length letters
+    int hashT = 0;
+    int hash = 0;
+    for (int i = 0; i < target.length(); i++)
+    {
+        hashT = hashT * x + target.charAt(i);
+        hash = hash * x + str.charAt(i);
+    }
+    
+    //found match in first substring
+    if (hashT == hash && target.equals(str.substring(0, target.length())))
+        return 0;
+    
+    int xPow = 1;
+    for (int i = 0; i < target.length() - 1; i++)
+        xPow *= x;
+    
+    for (int i = target.length(); i < str.length(); i++)
+    {
+        int toRemove = str.charAt(i - target.length());
+        hash = ((hash - toRemove * xPow) * x + str.charAt(i));
+        if (hash == hashT && target.equals(str.substring(i - target.length() + 1, i + 1)))
+            return i - target.length() + 1;
+    }
+    return - 1; //not found
 }
