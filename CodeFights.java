@@ -3531,3 +3531,134 @@ public static int search(String str, String target) //Rabin-Karp
     }
     return - 1; //not found
 }
+
+////// Overlapping time intervals
+////// Time: O(nlogn) Space: O(n)
+public static boolean hasOverlap(Interval[] intervals)
+{
+    //Turn intervals into points
+    List<Point> points = new ArrayList<>();
+    for (Interval interval : intervals)
+    {
+        points.add(new Point(interval.start, true));
+        points.add(new Point(interval.end, false));
+    }
+    
+    //sort points
+    Collections.sort(points);
+    
+    int count = 0;
+    for (Point point : points)
+    {
+        count = point.isStart() ? count + 1 : count - 1;
+        if (count > 1)
+            return true;
+    }
+    return false;
+}
+
+public static class Point implements Comparable<Point>
+{
+    int time;
+    boolean isStart;
+    
+    public Point(int time, boolean isStart)
+    {
+        this.time = time;
+        this.isStart = isStart;
+    }
+    
+    public int getTime()
+    {
+        return time;
+    }
+    
+    public boolean isStart()
+    {
+        return isStart;
+    }
+    
+    @Override
+    public int compareTo(Point other)
+    {
+        if (time == other.getTime())
+        {
+            if (isStart == other.isStart())
+                return 0;
+            else
+                return isStart ? -1 : 1;
+        }
+        return time > other.getTime() ? 1 : -1;
+    }
+}
+
+////// Merge time intervals
+////// Time: O(nlogn) Space: O(List<Interval> + Stack<Interval>)
+public static List<Interval> mergeIntervals(Interval[] intervals)
+{
+    List<Interval> merged = new ArrayList<>();
+    if (intervals == null || intervals.length == 0) return merged;
+    //Turn intervals into points
+    List<Point> points = new ArrayList<>();
+    for (Interval interval : intervals)
+    {
+        points.add(new Point(interval.start, true));
+        points.add(new Point(interval.end, false));
+    }
+    
+    //sort points
+    Collections.sort(points);
+    
+    Stack<Point> startStack = new Stack<>();        
+    
+    for (Point point : points)
+    {
+        if (point.isStart())
+            startStack.push(point);
+        else
+        {               
+            if (startStack.size() == 1)
+            {
+                Point start = startStack.peek();
+                merged.add(new Interval(start.getTime(), point.getTime()));
+            }
+            startStack.pop();
+        }
+    }
+    return merged;
+}
+
+public static class Point implements Comparable<Point>
+{
+    int time;
+    boolean isStart;
+    
+    public Point(int time, boolean isStart)
+    {
+        this.time = time;
+        this.isStart = isStart;
+    }
+    
+    public int getTime()
+    {
+        return time;
+    }
+    
+    public boolean isStart()
+    {
+        return isStart;
+    }
+    
+    @Override
+    public int compareTo(Point other)
+    {
+        if (time == other.getTime())
+        {
+            if (isStart == other.isStart())
+                return 0;
+            else
+                return isStart ? -1 : 1;
+        }
+        return time > other.getTime() ? 1 : -1;
+    }
+}
