@@ -3662,3 +3662,28 @@ public static class Point implements Comparable<Point>
         return time > other.getTime() ? 1 : -1;
     }
 }
+
+////// Print K Smallest
+////// Time: O(NLog(k)) Space: O(K)
+public static void printKSmallest(int[] a, int k)
+{
+    if (k > a.length) return;
+    // In Java, Priority Queue class is a heap
+    PriorityQueue<Integer> heap = new PriorityQueue<>(Collections.reverseOrder());
+    
+    for (int i = 0; i < a.length; i++)
+    {
+        if (i < k)
+            heap.add(a[i]);
+        else if (a[i] < heap.peek())
+        {
+            heap.remove();
+            heap.add(a[i]);
+        }
+    }
+    Iterator<Integer> iterator = heap.iterator();
+    
+    while (iterator.hasNext())
+        System.out.print(iterator.next());
+    
+}
