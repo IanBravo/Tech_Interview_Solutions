@@ -3133,7 +3133,7 @@ public static void printCombos(int[] arr, int[] buffer, int startIndex, int buff
     for (int i = startIndex; i < arr.length; i++)
     {
         buffer[bufferIndex] = arr[i];
-        printCombos(arr, buffer, startIndex + 1, bufferIndex + 1);
+        printCombos(arr, buffer, i + 1, bufferIndex + 1);
     }
 }
 
@@ -3709,4 +3709,37 @@ public static int findKthSmallest(int[] a, int k)
     }
        
     return heap.remove();
+}
+
+////// longest Substring Without Duplication
+////// Time: O(n) Space: O(n)
+public static String longestSubstringWithoutDuplication(String str) {
+    if (str == null || str.length() < 2) return str;
+    
+    StringBuilder subString = new StringBuilder();
+    String longestSubString = "";
+    int p1 = 0, p2 = 1;
+    HashSet<Character> seen = new HashSet<>();
+    seen.add(str.charAt(p1));
+    subString.append(str.charAt(p1));
+    
+    while (p2 < str.length()) {
+        if (seen.contains(str.charAt(p2))) {
+            if (subString.length() > longestSubString.length()) longestSubString = subString.toString();
+            while (str.charAt(p1) != str.charAt(p2)) {
+                subString.deleteCharAt(0);
+                seen.remove(str.charAt(p1));
+                p1++;
+            }
+            subString.deleteCharAt(0);
+            seen.remove(str.charAt(p1));
+            p1++;
+        } else {
+            seen.add(str.charAt(p2));
+            subString.append(str.charAt(p2));
+            p2++;
+        }
+    }
+    
+    return subString.length() > longestSubString.length() ? subString.toString() : longestSubString;
 }
