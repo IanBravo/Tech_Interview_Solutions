@@ -3743,3 +3743,31 @@ public static String longestSubstringWithoutDuplication(String str) {
     
     return subString.length() > longestSubString.length() ? subString.toString() : longestSubString;
 }
+
+////// Largest Range
+////// Time: O(n) Space: O(n)
+public static int[] largestRange(int[] array) {
+    int[] range = new int[2];
+    
+    if (array == null || array.length == 0)
+        return range;
+    
+    HashSet<Integer> set = new HashSet<>();
+    int largestRange = 0;
+    
+    for (int i : array) set.add(i);
+    
+    for (int num : array) {
+        int currentRange = 0, currentNum = num;
+        while (set.contains(currentNum)) {
+            currentRange++;
+            currentNum++;
+        }
+        
+        if (currentRange > largestRange) {
+            largestRange = currentRange;
+            range = new int[] {num, currentNum - 1};
+        }
+    }
+    return range;
+}
