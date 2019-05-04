@@ -3771,3 +3771,122 @@ public static int[] largestRange(int[] array) {
     }
     return range;
 }
+
+////// Game of Life
+////// Time: O(mn) Space: O(mn)
+public static void gameOfLife(int[][] board) {
+    if (board == null || board.length == 0) return;
+    
+    int[][] prevState = new int[board.length][board[0].length];
+    
+    cloneMatrix(board, prevState);
+    
+    for (int i = 0; i < prevState.length; i++) {
+        for (int j = 0; j < prevState[i].length; j++) {
+            int neighbors = countNeighbors(prevState, i, j);
+            
+            if (prevState[i][j] == 1) {
+                if (neighbors < 2)
+                    board[i][j] = 0;
+                else if (neighbors == 2 || neighbors == 3)
+                    board[i][j] = 1;
+                else
+                    board[i][j] = 0;                        
+            } else {
+                if (neighbors == 3)
+                    board[i][j] = 1;
+            }
+        }
+    }
+}
+
+private static void cloneMatrix(int[][] arr, int[][] arr2 ) {
+    for (int i = 0; i < arr.length; i++) {
+        for (int j = 0; j < arr[i].length; j++) {
+            arr2[i][j] = arr[i][j];
+        }
+    }
+}
+
+private static int countNeighbors(int[][] prevState, int i, int j) {
+    int neighbors = 0;
+    
+    if (j - 1 >= 0)
+        if (prevState[i][j - 1] == 1) neighbors++;
+    
+    if (i - 1 >= 0 && j - 1 >= 0)
+        if (prevState[i - 1][j - 1] == 1) neighbors++;
+    
+    if (i - 1 >= 0)
+        if (prevState[i - 1][j] == 1) neighbors++;
+    
+    if (i - 1 >= 0 && j + 1 < prevState[i].length)
+        if (prevState[i - 1][j + 1] == 1) neighbors++;
+    
+    if (j + 1 < prevState[i].length)
+        if (prevState[i][j + 1] == 1) neighbors++;
+    
+    if (i + 1 < prevState.length && j + 1 < prevState[i].length)
+        if (prevState[i + 1][j + 1] == 1) neighbors++;
+    
+    if (i + 1 < prevState.length)
+        if (prevState[i + 1][j] == 1) neighbors++;
+    
+    if (i + 1 < prevState.length && j - 1 >= 0)
+        if (prevState[i + 1][j - 1] == 1) neighbors++;
+    
+    return neighbors;
+}
+
+////// Find High/Low index
+////// Time: O(log(n)) Space: O(1)
+
+public static int findLow(int[] arr, int key) {
+    if (arr == null || arr.length == 0)
+        return -1;
+
+    int start = 0, end = arr.length - 1;
+
+    while (start <= end) {
+        int mid = start + ((end - start) / 2);
+
+        if (arr[mid] == key) {
+            if (mid - 1 == 0) return mid;
+            if (arr[mid - 1] != key)
+                return mid;
+            else
+                end = mid - 1;
+        } else {
+            if (arr[mid] > key)
+                end = mid - 1;
+            else
+                start = mid + 1;
+        }
+    }
+    return - 1;
+}
+
+public static int findHigh(int[] arr, int key) {
+    if (arr == null || arr.length == 0)
+        return -1;
+
+    int start = 0, end = arr.length - 1;
+
+    while (start <= end) {
+        int mid = start + ((end - start) / 2);
+
+        if (arr[mid] == key) {
+            if (mid + 1 == arr.length) return mid;
+            if (arr[mid + 1] != key)
+                return mid;
+            else
+                start = mid + 1;
+        } else {
+            if (arr[mid] > key)
+                end = mid - 1;
+            else
+                start = mid + 1;
+        }
+    }
+    return - 1;
+}
