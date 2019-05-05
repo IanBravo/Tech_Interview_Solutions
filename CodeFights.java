@@ -3840,7 +3840,6 @@ private static int countNeighbors(int[][] prevState, int i, int j) {
 
 ////// Find High/Low index
 ////// Time: O(log(n)) Space: O(1)
-
 public static int findLow(int[] arr, int key) {
     if (arr == null || arr.length == 0)
         return -1;
@@ -3889,4 +3888,18 @@ public static int findHigh(int[] arr, int key) {
         }
     }
     return - 1;
+}
+
+////// Move Zeroes to the left
+////// Time: O(n) Space: O(1)
+public static void move_zeros_to_left_in_array(int[] arr) {
+    if (arr == null || arr.length == 0) return;
+    for (int lastNonZeroFoundAt = arr.length - 1, curr = arr. length - 1; curr >= 0; curr--) {
+        if (arr[curr] != 0) {
+          int temp = arr[lastNonZeroFoundAt];
+          arr[lastNonZeroFoundAt] = arr[curr];
+          arr[curr] = temp;
+          lastNonZeroFoundAt--;
+        }
+    }
 }
