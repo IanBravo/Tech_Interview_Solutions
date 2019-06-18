@@ -3903,3 +3903,38 @@ public static void move_zeros_to_left_in_array(int[] arr) {
         }
     }
 }
+
+////// Find Permutation
+////// Time: O(n) Space: O(map)
+public static boolean findPermutation(String str, String pattern) {
+    if (str == null || pattern == null || str.length() == 0 || pattern.length() == 0 || pattern.length() > str.length())
+        return false;
+    
+    int[] map = new int[256];
+    int start = 0, end = pattern.length() - 1;
+    
+    for (char c : pattern.toCharArray())
+        map[c]++;
+    
+    while (end < str.length()) {
+        if (map[str.charAt(start)] > 0 && map[str.charAt(end)] > 0) {
+            if (str.substring(start, end + 1) != pattern) {
+                if (isPermutation(start, end, str, Arrays.copyOf(map, map.length)))
+                    return true;
+            }
+        }
+        start++;
+        end++;
+    }
+    return false;
+}
+
+private static boolean isPermutation(int start, int end, String str, int[] map) {
+    for (int i = start; i <= end; i++) {
+        if (map[str.charAt(i)] == 0)
+            return false;
+        else
+            map[str.charAt(i)]--;
+    }
+    return true;
+}
