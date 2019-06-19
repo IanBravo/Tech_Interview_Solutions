@@ -3938,3 +3938,46 @@ private static boolean isPermutation(int start, int end, String str, int[] map) 
     }
     return true;
 }
+
+////// Minimum Window Substring
+////// Time: O(n) Space: O(map)
+public static String smallestWindowsSubstring(String str, String pattern) {
+    if (str == null || str.length() == 0 || pattern == null || pattern.length() > str.length())
+        return "";
+    
+    int[] map = new int[256];
+    int start = 0, windowSize = pattern.length(), minSize = Integer.MAX_VALUE, windowStart = 0;
+    
+    for (char c : pattern.toCharArray()) map[c]++;
+    
+    for (int end = 0; end < str.length(); end++) {
+        if (map[str.charAt(end)] != 0) {
+            if (map[str.charAt(end)] > 0) {
+                windowSize--;                   
+            }
+            if (map[str.charAt(end)] == 1) {
+                map[str.charAt(end)] = -1;
+            } else {
+                map[str.charAt(end)]--;
+            }               
+        }
+        
+        while (windowSize == 0) {
+            if (end - start + 1 < minSize) {
+                minSize = end - start + 1;
+                windowStart = start;
+            }
+            
+            if (map[str.charAt(start)] != 0) {                  
+                if (map[str.charAt(start)] == -1) {
+                    windowSize++;
+                    map[str.charAt(start)] = 1;
+                } else {
+                    map[str.charAt(start)]++;
+                }
+            }                               
+            start++;
+        }
+    }
+    return minSize == Integer.MAX_VALUE ? "" : str.substring(windowStart, windowStart + minSize);
+}
