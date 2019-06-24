@@ -3996,3 +3996,46 @@ public static boolean canAttend(Interval[] intervals) {
     }
     return true;
 }
+
+////// Maximum CPU load
+////// Time: O(n*Log(n)) Space: O(n)
+public static int findMaxCPULoad(List<Job> jobs) {
+    if (jobs == null || jobs.size() == 0)
+        return 0;
+
+    Collections.sort(jobs, (a, b) -> Integer.compare(a.start, b.start));
+
+    PriorityQueue<Job> minHeap = new PriorityQueue<>(jobs.size(), (a, b) -> Integer.compare(a.end, b.end));
+    int currLoad = 0, maxLoad = 0;
+
+    for (Job job : jobs) {
+        while (!minHeap.isEmpty() && job.start >= minHeap.peek().end)
+        currLoad -= minHeap.poll().cpuLoad;
+  
+        currLoad += job.cpuLoad;
+        maxLoad = Math.max(currLoad, maxLoad);
+        minHeap.add(job);
+    }
+    return maxLoad;
+}
+
+////// Meeting Rooms
+////// Time: O(n*Log(n)) Space: O(n)
+public static int findMaxCPULoad(List<Meeting> meetings) {
+    if (meetings == null || meetings.size() == 0)
+        return 0;
+
+    Collections.sort(meetings, (a, b) -> Integer.compare(a.start, b.start));
+
+    PriorityQueue<Meeting> minHeap = new PriorityQueue<>(meetings.size(), (a, b) -> Integer.compare(a.end, b.end));
+    int minRooms = 1;
+
+    for (Meeting meeting : meetings) {
+        while (!minHeap.isEmpty() && meeting.start >= minHeap.peek().end)
+            minHeap.poll();
+        
+        minHeap.add(meeting);
+        minRooms = Math.max(minRooms, minHeap.size());        
+    }
+    return minRooms;
+}
