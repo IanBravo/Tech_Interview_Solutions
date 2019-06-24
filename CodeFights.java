@@ -3981,3 +3981,18 @@ public static String smallestWindowsSubstring(String str, String pattern) {
     }
     return minSize == Integer.MAX_VALUE ? "" : str.substring(windowStart, windowStart + minSize);
 }
+
+////// Conflicting Appointments
+////// Time: O(n*Log(n)) Space: O(1)
+public static boolean canAttend(Interval[] intervals) {
+    if (intervals == null || intervals.length < 2 )
+        return true;
+    
+    Arrays.sort(intervals, (a, b) -> Integer.compare(a.start, b.start));
+    
+    for (int i = 1; i < intervals.length; i++) {
+        if (intervals[i - 1].end > intervals[i].start)
+            return false;
+    }
+    return true;
+}
