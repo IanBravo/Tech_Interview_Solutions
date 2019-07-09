@@ -4039,3 +4039,41 @@ public static int findMaxCPULoad(List<Meeting> meetings) {
     }
     return minRooms;
 }
+
+
+////// Generate Matrix
+////// Time: O(mn) Space: O(mn)
+public static int[][] generateMatrix(int n) {
+    if (n == 0) return new int[0][0];
+    if (n == 1) return new int[][] {{1}};
+    
+    int[][] spiral = new int[n][n];
+    int left = 0, up = 0, down = n - 1, right = n - 1, counter = 1;
+    
+    while (true) {
+        int i = up, j = left;
+        
+        while (j <= right)
+            spiral[i][j++] = counter++;
+        if (++up > down) break;
+        j = right;
+        i = up;
+        
+        while (i <= down)
+            spiral[i++][j] = counter++;
+        if (--right < left) break;        
+        j = right;
+        i = down;
+        
+        while (j >= left)
+            spiral[i][j--] = counter++;
+        if (--down < up) break;
+        i = down;
+        j = left;
+        
+        while (i >= up)
+            spiral[i--][j] = counter++;
+        if (++left > right) break;
+    }
+    return spiral;
+}
